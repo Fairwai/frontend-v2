@@ -1,17 +1,12 @@
 "use client"
 
-import { ArrowLeft } from "lucide-react"
-import Link from "next/link"
+import { Bell } from "lucide-react"
 import { AlertHistoryTable } from "@/components/alerts/alert-history-table"
 import { AlertActions } from "@/components/alerts/table-actions"
-import { PageHeading } from "@/components/layout/page-heading"
+import { ItemHeading } from "@/components/layout/item-heading"
 import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger
-} from "@/components/ui/hover-card"
+import { GradientIcon } from "@/components/ui/gradient-icon"
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card"
 import { NameValuePair } from "@/components/ui/name-value-pair"
 import { SecretField } from "@/components/ui/secret-field"
 import {
@@ -36,15 +31,20 @@ export function AlertDetailView({ rule, history, nextCursor }: AlertDetailViewPr
   return (
     <>
       <div className="flex items-center flex-col gap-2 sm:flex-row sm:justify-between">
-        <div className="flex items-center gap-2 w-full sm:w-auto">
-          <Button variant="ghost" size="icon" asChild>
-            <Link href="/alerts">
-              <ArrowLeft />
-            </Link>
-          </Button>
-          <PageHeading title={rule.name} containerClassName="md:flex-1" />
+        <ItemHeading
+          title="Alert rule"
+          name={rule.name}
+          nameClassName="text-xl"
+          containerClassName="md:flex-1"
+          gradientIcon={
+            <GradientIcon color="var(--color-rose-300)" size="xl">
+              <Bell size={32} />
+            </GradientIcon>
+          }
+        />
+        <div className="flex w-full sm:w-auto gap-2 flex-row sm:items-center">
+          <AlertActions rule={rule} buttonVariant="outline" />
         </div>
-        <AlertActions rule={rule} buttonVariant="outline" />
       </div>
 
       <div className="grid mt-10 md:mt-12 grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -61,22 +61,14 @@ export function AlertDetailView({ rule, history, nextCursor }: AlertDetailViewPr
         <NameValuePair
           title="Metric"
           value={
-            <Badge variant="secondary">
-              {ALERT_TYPE_LABELS[rule.alertType] || rule.alertType}
-            </Badge>
+            <Badge variant="secondary">{ALERT_TYPE_LABELS[rule.alertType] || rule.alertType}</Badge>
           }
         />
         <NameValuePair
           title="Condition"
           value={`${OPERATOR_LABELS[rule.operator] || rule.operator} ${rule.value}`}
         />
-        <NameValuePair
-          title="Cooldown"
-          value={`${rule.cooldownMinutes} minutes`}
-        />
-      </div>
-
-      <div className="grid mt-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <NameValuePair title="Cooldown" value={`${rule.cooldownMinutes} minutes`} />
         <NameValuePair
           title="Email Recipients"
           value={
@@ -104,6 +96,7 @@ export function AlertDetailView({ rule, history, nextCursor }: AlertDetailViewPr
         />
         <NameValuePair
           title="Callback URL"
+          containerClassName="col-span-1 md:col-span-2"
           value={channels?.callback?.url}
           copyText={channels?.callback?.url}
         />

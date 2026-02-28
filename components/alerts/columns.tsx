@@ -33,7 +33,7 @@ export const columns: ColumnDef<AlertRule>[] = [
           >
             <GradientIcon
               color={
-                row.original.enabled ? "var(--color-amber-300)" : "var(--color-gray-300)"
+                row.original.enabled ? "var(--color-rose-300)" : "var(--color-gray-300)"
               }
             >
               <Bell />

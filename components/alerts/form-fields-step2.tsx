@@ -3,6 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { ArrowLeft, Info, SendHorizontal } from "lucide-react"
 import { useForm } from "react-hook-form"
+import { PasswordField } from "@/components/auth/password-field"
 import { Button } from "@/components/ui/button"
 import { DialogFooter } from "@/components/ui/dialog"
 import {
@@ -16,16 +17,8 @@ import {
 import { Form, FormControl, FormField } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Spinner } from "@/components/ui/spinner"
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger
-} from "@/components/ui/tooltip"
-import {
-  type CreateAlertRuleStep2Data,
-  createAlertRuleStep2Schema
-} from "@/lib/schemas/alerts"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
+import { type CreateAlertRuleStep2Data, createAlertRuleStep2Schema } from "@/lib/schemas/alerts"
 
 interface FormFieldsStep2Props {
   loading: boolean
@@ -52,7 +45,7 @@ export function FormFieldsStep2({
   // Convert array default to semicolon-separated string for the input
   const emailDefault = Array.isArray(defaultValues?.emailRecipients)
     ? defaultValues.emailRecipients.join("; ")
-    : defaultValues?.emailRecipients ?? ""
+    : (defaultValues?.emailRecipients ?? "")
 
   const form = useForm({
     resolver: zodResolver(createAlertRuleStep2Schema),
@@ -67,12 +60,12 @@ export function FormFieldsStep2({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        <FieldGroup>
+        <FieldGroup className="grid grid-cols-2 gap-4">
           <FormField
             control={form.control}
             name="emailRecipients"
             render={({ field, fieldState }) => (
-              <Field data-invalid={fieldState.invalid}>
+              <Field data-invalid={fieldState.invalid} className="col-span-2">
                 <FieldLabel htmlFor={field.name}>Email Recipients (optional)</FieldLabel>
                 <FieldContent>
                   <FormControl>
@@ -98,7 +91,7 @@ export function FormFieldsStep2({
             control={form.control}
             name="callbackUrl"
             render={({ field, fieldState }) => (
-              <Field data-invalid={fieldState.invalid}>
+              <Field data-invalid={fieldState.invalid} className="col-span-2">
                 <FieldLabel htmlFor={field.name}>Callback URL (optional)</FieldLabel>
                 <FieldContent>
                   <FormControl>
@@ -117,50 +110,40 @@ export function FormFieldsStep2({
             )}
           />
 
-          <FormField
-            control={form.control}
+          <PasswordField
+            loading={loading}
+            containerClassName="col-span-2"
             name="callbackSecret"
-            render={({ field, fieldState }) => (
-              <Field data-invalid={fieldState.invalid}>
-                <FieldLabel htmlFor={field.name}>
-                  Callback Secret (optional){" "}
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Info className="h-4 w-4 text-muted-foreground" />
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p className="text-sm max-w-xs">
-                          When set, alert callback requests will include an{" "}
-                          <code className="text-xs bg-muted px-1 rounded">x-mb-alert-secret</code>{" "}
-                          header with this value so your backend can verify the request is authentic.
-                        </p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-                </FieldLabel>
-                <FieldContent>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      id={field.name}
-                      type="password"
-                      placeholder="Optional signing secret"
-                      maxLength={256}
-                      disabled={loading}
-                    />
-                  </FormControl>
-                  <FieldError errors={fieldState.error ? [fieldState.error] : undefined} />
-                </FieldContent>
-              </Field>
-            )}
+            label={
+              <FieldLabel htmlFor="callbackSecret">
+                Callback Secret (optional){" "}
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Info className="h-4 w-4 text-muted-foreground" />
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p className="text-sm max-w-xs">
+                        When set, alert callback requests will include an{" "}
+                        <code className="text-xs bg-muted px-1 rounded">x-mb-alert-secret</code>{" "}
+                        header with this value so your backend can verify the request is authentic.
+                      </p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </FieldLabel>
+            }
+            ariaLabel="Callback Secret (optional)"
+            placeholder="Optional signing secret"
+            autoComplete="off"
+            showForgotPasswordLink={false}
           />
 
           <FormField
             control={form.control}
             name="cooldownMinutes"
             render={({ field, fieldState }) => (
-              <Field data-invalid={fieldState.invalid}>
+              <Field data-invalid={fieldState.invalid} className="col-span-2">
                 <FieldLabel htmlFor={field.name}>
                   Cooldown{" "}
                   <TooltipProvider>
@@ -170,8 +153,8 @@ export function FormFieldsStep2({
                       </TooltipTrigger>
                       <TooltipContent>
                         <p className="text-sm max-w-xs">
-                          After an alert fires, it will be suppressed for this duration.
-                          Suppressed alerts are counted and included in the next notification.
+                          After an alert fires, it will be suppressed for this duration. Suppressed
+                          alerts are counted and included in the next notification.
                         </p>
                       </TooltipContent>
                     </Tooltip>
@@ -201,12 +184,7 @@ export function FormFieldsStep2({
         </FieldGroup>
 
         <DialogFooter>
-          <Button
-            type="button"
-            variant="outline"
-            onClick={onBack}
-            disabled={loading}
-          >
+          <Button type="button" variant="outline" onClick={onBack} disabled={loading}>
             <ArrowLeft /> Back
           </Button>
           <Button type="submit" disabled={loading} aria-busy={loading}>

@@ -55,7 +55,7 @@ export function AlertHistoryTable({ ruleUuid, history, nextCursor }: AlertHistor
       <Empty className="border rounded-lg">
         <EmptyHeader>
           <EmptyMedia>
-            <GradientIcon color="var(--color-yellow-300)" size="lg">
+            <GradientIcon color="var(--color-rose-300)" size="lg">
               <Bell />
             </GradientIcon>
           </EmptyMedia>

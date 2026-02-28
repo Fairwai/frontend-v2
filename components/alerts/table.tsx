@@ -32,7 +32,7 @@ export function AlertsTable({ rules, onAddButtonClick }: AlertsTableProps) {
       <Empty className="border rounded-lg mt-8">
         <EmptyHeader>
           <EmptyMedia>
-            <GradientIcon color="var(--color-amber-300)" size="lg">
+            <GradientIcon color="var(--color-rose-300)" size="lg">
               <Bell />
             </GradientIcon>
           </EmptyMedia>

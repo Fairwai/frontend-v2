@@ -1,60 +1,53 @@
-"use client";
+"use client"
 
-import { Eye, EyeOff } from "lucide-react";
-import Link from "next/link";
-import { useState } from "react";
-import { useFormContext } from "react-hook-form";
-import { Button } from "@/components/ui/button";
-import {
-  Field,
-  FieldContent,
-  FieldError,
-  FieldLabel,
-} from "@/components/ui/field";
-import { FormControl, FormField } from "@/components/ui/form";
+import { Eye, EyeOff } from "lucide-react"
+import Link from "next/link"
+import { useState } from "react"
+import { useFormContext } from "react-hook-form"
+import { Button } from "@/components/ui/button"
+import { Field, FieldContent, FieldError, FieldLabel } from "@/components/ui/field"
+import { FormControl, FormField } from "@/components/ui/form"
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupButton,
-  InputGroupInput,
-} from "@/components/ui/input-group";
+  InputGroupInput
+} from "@/components/ui/input-group"
 
 interface PasswordFieldProps {
-  loading: boolean;
-  name: string;
-  placeholder?: string;
+  loading: boolean
+  name: string
+  placeholder?: string
   /** Label as string (rendered in FieldLabel) or custom ReactNode (e.g. label with tooltip) */
-  label?: React.ReactNode;
+  label?: React.ReactNode
   /** Override aria-label when label is custom (ReactNode); otherwise derived from label/placeholder */
-  ariaLabel?: string;
-  autoComplete: string;
-  showForgotPasswordLink?: boolean;
+  ariaLabel?: string
+  autoComplete: string
+  showForgotPasswordLink?: boolean
+  containerClassName?: React.HTMLAttributes<HTMLDivElement>["className"]
 }
 
 export const PasswordField = ({
+  containerClassName,
   loading,
   name,
   label,
   ariaLabel,
   placeholder,
   autoComplete,
-  showForgotPasswordLink = false,
+  showForgotPasswordLink = false
 }: PasswordFieldProps) => {
-  const [showPassword, setShowPassword] = useState(false);
-  const form = useFormContext();
+  const [showPassword, setShowPassword] = useState(false)
+  const form = useFormContext()
 
   return (
     <FormField
       control={form.control}
       name={name}
       render={({ field, fieldState }) => (
-        <Field data-invalid={fieldState.invalid}>
+        <Field data-invalid={fieldState.invalid} className={containerClassName}>
           {label !== undefined &&
-            (typeof label === "string" ? (
-              <FieldLabel htmlFor={name}>{label}</FieldLabel>
-            ) : (
-              label
-            ))}
+            (typeof label === "string" ? <FieldLabel htmlFor={name}>{label}</FieldLabel> : label)}
           <FieldContent>
             <FormControl>
               <InputGroup>
@@ -80,26 +73,17 @@ export const PasswordField = ({
                     size="icon-xs"
                     onClick={() => setShowPassword(!showPassword)}
                     disabled={loading}
-                    aria-label={
-                      showPassword ? "Hide password" : "Show password"
-                    }
+                    aria-label={showPassword ? "Hide password" : "Show password"}
                   >
                     {showPassword ? <EyeOff /> : <Eye />}
                   </InputGroupButton>
                 </InputGroupAddon>
               </InputGroup>
             </FormControl>
-            <FieldError
-              errors={fieldState.error ? [fieldState.error] : undefined}
-            />
+            <FieldError errors={fieldState.error ? [fieldState.error] : undefined} />
             {showForgotPasswordLink && (
               <div className="flex justify-end mt-3">
-                <Button
-                  variant="link"
-                  disabled={loading}
-                  asChild
-                  className="h-auto p-0"
-                >
+                <Button variant="link" disabled={loading} asChild className="h-auto p-0">
                   <Link href="/forgot-password">Forgot your password?</Link>
                 </Button>
               </div>
@@ -108,5 +92,5 @@ export const PasswordField = ({
         </Field>
       )}
     />
-  );
-};
+  )
+}
