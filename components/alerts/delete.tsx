@@ -46,17 +46,19 @@ export function DeleteAlertDialog({ open, onOpenChange, rule }: DeleteAlertDialo
 
     if (loading || typedText !== "delete") return
 
+    let succeeded = false
     try {
       setLoading(true)
       await axiosDeleteInstance(DELETE_ALERT_RULE(rule.uuid))
 
       router.push("/alerts")
       toast.success("Alert rule deleted successfully")
-      onCancel(false)
+      succeeded = true
     } catch (error) {
       toast.error(error instanceof Error ? error.message : genericError)
     } finally {
       setLoading(false)
+      if (succeeded) onCancel(false)
     }
   }
 

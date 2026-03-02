@@ -75,6 +75,7 @@ export function CreateAlertDialog({ open, onOpenChange }: CreateAlertDialogProps
       return
     }
 
+    let succeeded = false
     try {
       setLoading(true)
       const response = await axiosPostInstance<unknown, CreateAlertRuleResponse>(
@@ -93,11 +94,12 @@ export function CreateAlertDialog({ open, onOpenChange }: CreateAlertDialogProps
 
       router.push(`/alerts/${response.data.ruleId}`)
       toast.success("Alert rule created successfully")
-      handleClose(false)
+      succeeded = true
     } catch (error) {
       toast.error(error instanceof Error ? error.message : genericError)
     } finally {
       setLoading(false)
+      if (succeeded) handleClose(false)
     }
   }
 

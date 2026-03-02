@@ -66,9 +66,12 @@ export const alertHistoryColumns: ColumnDef<AlertHistoryEntry>[] = [
     },
     cell: ({ row }) => {
       const { deliveryStatus } = row.original
-      const allSuccess = deliveryStatus?.every((d) => d.success) ?? false
 
-      return allSuccess ? (
+      if (!deliveryStatus || deliveryStatus.length === 0) {
+        return <Badge variant="secondary">Pending</Badge>
+      }
+
+      return deliveryStatus.every((d) => d.success) ? (
         <Badge variant="success">Delivered</Badge>
       ) : (
         <Badge variant="destructive">Failed</Badge>

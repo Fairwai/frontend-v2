@@ -43,7 +43,7 @@ export function SecretField({
           aria-label={show ? "Hide secret" : "Show secret"}
           onClick={() => setShow(!show)}
         >
-          {show ? <Eye /> : <EyeOff />}
+          {show ? <EyeOff /> : <Eye />}
         </InputGroupButton>
       </InputGroupAddon>
       <InputGroupAddon align="inline-end">

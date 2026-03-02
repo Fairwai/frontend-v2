@@ -95,6 +95,7 @@ export function EditAlertDialog({ rule, open, onOpenChange }: EditAlertDialogPro
       return
     }
 
+    let succeeded = false
     try {
       setLoading(true)
       await axiosPutInstance<unknown, null>(UPDATE_ALERT_RULE, {
@@ -106,11 +107,12 @@ export function EditAlertDialog({ rule, open, onOpenChange }: EditAlertDialogPro
 
       router.refresh()
       toast.success("Alert rule updated successfully")
-      handleClose(false)
+      succeeded = true
     } catch (error) {
       toast.error(error instanceof Error ? error.message : genericError)
     } finally {
       setLoading(false)
+      if (succeeded) handleClose(false)
     }
   }
 

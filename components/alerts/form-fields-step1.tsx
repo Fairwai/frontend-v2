@@ -216,7 +216,7 @@ export function FormFieldsStep1({ loading, defaultValues, allowedAlertTypes, onN
               Cancel
             </Button>
           </DialogClose>
-          <Button type="submit">
+          <Button type="submit" disabled={loading}>
             <ArrowRight /> Next
           </Button>
         </DialogFooter>

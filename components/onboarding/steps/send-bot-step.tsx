@@ -37,7 +37,7 @@ export function SendBotStep({ step, isActive, isEnabled, apiKey }: SendBotStepPr
     }
   })
   const { configuration } = useConfiguration()
-  const isTranscriptionEnabled = configuration?.features.transcription
+  const isTranscriptionEnabled = configuration?.features?.transcription ?? false
 
   const handleSendBot = async (values: SendBotFormValues) => {
     if (!apiKey || loading) return
