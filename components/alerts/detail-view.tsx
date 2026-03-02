@@ -25,7 +25,13 @@ interface AlertDetailViewProps {
   openDelete?: boolean
 }
 
-export function AlertDetailView({ rule, history, cursor, prevCursor, openDelete }: AlertDetailViewProps) {
+export function AlertDetailView({
+  rule,
+  history,
+  cursor,
+  prevCursor,
+  openDelete
+}: AlertDetailViewProps) {
   const channels = rule.deliveryChannels
 
   return (

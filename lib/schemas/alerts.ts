@@ -10,6 +10,7 @@ import {
   preprocess,
   string,
   url,
+  uuid,
   enum as zodEnum
 } from "zod"
 import { CursorSchema } from "@/lib/schemas/common"
@@ -31,12 +32,19 @@ export const alertTypeSchema = zodEnum(
     message: "Alert type is required"
   }
 )
+export type AlertType = output<typeof alertTypeSchema>
+
 export const alertOperatorSchema = zodEnum(["gte", "lte"], {
   message: "Alert operator is required"
 })
 
+export type AlertOperator = output<typeof alertOperatorSchema>
+
+export const alertCategorySchema = zodEnum(["threshold", "operational"])
+
+export type AlertCategory = output<typeof alertCategorySchema>
 // Labels
-export const ALERT_TYPE_LABELS: Record<string, string> = {
+export const ALERT_TYPE_LABELS: Record<AlertType, string> = {
   daily_bot_cap: "Daily Bot Cap",
   token_balance: "Token Balance",
   calendar_connections: "Calendar Connections",
@@ -49,10 +57,14 @@ export const ALERT_TYPE_LABELS: Record<string, string> = {
 }
 
 // Alert types gated by feature flags
-export const STRIPE_ALERT_TYPES: string[] = ["daily_bot_cap", "token_balance", "calendar_connections"]
+export const STRIPE_ALERT_TYPES: AlertType[] = [
+  "daily_bot_cap",
+  "token_balance",
+  "calendar_connections"
+]
 
 // Operational alert types — always available
-export const OPERATIONAL_ALERT_TYPES: string[] = [
+export const OPERATIONAL_ALERT_TYPES: AlertType[] = [
   "bot_join_failed",
   "recording_failed",
   "zoom_credential_error",
@@ -64,11 +76,12 @@ export const OPERATIONAL_ALERT_TYPES: string[] = [
 /**
  * Get the alert category for a given alert type
  */
-export function getAlertCategory(alertType: string): "threshold" | "operational" {
+export function getAlertCategory(alertType: AlertType | undefined): AlertCategory {
+  if (!alertType) return "threshold"
   return OPERATIONAL_ALERT_TYPES.includes(alertType) ? "operational" : "threshold"
 }
 
-export const OPERATOR_LABELS: Record<string, string> = {
+export const OPERATOR_LABELS: Record<AlertOperator, string> = {
   gte: ">=",
   lte: "<="
 }
@@ -126,12 +139,12 @@ export const alertRuleSchema = object({
   id: number(),
   teamId: number(),
   userId: number(),
-  uuid: string(),
+  uuid: uuid(),
   name: string(),
   enabled: boolean(),
-  category: string(),
-  alertType: string(),
-  operator: string(),
+  category: alertCategorySchema,
+  alertType: alertTypeSchema,
+  operator: alertOperatorSchema,
   value: number(),
   deliveryChannels: nullable(deliveryChannelsViewSchema),
   cooldownMinutes: number(),
@@ -161,9 +174,9 @@ export const alertHistoryEntrySchema = object({
   id: number(),
   teamId: number(),
   alertRuleId: number(),
-  uuid: string(),
-  alertType: string(),
-  category: string(),
+  uuid: uuid(),
+  alertType: alertTypeSchema,
+  category: alertCategorySchema,
   currentValue: number(),
   thresholdValue: number(),
   message: nullable(string()),
@@ -203,8 +216,6 @@ export const alertDetailSearchParamsSchema = object({
 })
 
 // Type exports
-export type AlertType = output<typeof alertTypeSchema>
-export type AlertOperator = output<typeof alertOperatorSchema>
 export type CreateAlertRuleStep1Data = output<typeof createAlertRuleStep1Schema>
 export type CreateAlertRuleStep2Data = output<typeof createAlertRuleStep2Schema>
 export type DeliveryStatusEntry = output<typeof deliveryStatusEntrySchema>

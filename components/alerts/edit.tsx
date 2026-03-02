@@ -152,7 +152,9 @@ export function EditAlertDialog({ rule, open, onOpenChange }: EditAlertDialogPro
               <FormFieldsStep2
                 loading={loading}
                 defaultValues={step2Defaults}
-                isOperational={getAlertCategory((step1Data ?? step1Defaults).alertType ?? "") === "operational"}
+                isOperational={
+                  getAlertCategory((step1Data ?? step1Defaults).alertType) === "operational"
+                }
                 submitLabel="Save"
                 loadingLabel="Saving"
                 onBack={() => setStep(1)}
