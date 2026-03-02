@@ -23,12 +23,13 @@ import type { AlertRule } from "@/lib/schemas/alerts"
 interface AlertActionsProps {
   rule: AlertRule
   buttonVariant?: "ghost" | "outline" | "default"
+  initialDeleteOpen?: boolean
 }
 
-export function AlertActions({ rule, buttonVariant = "ghost" }: AlertActionsProps) {
+export function AlertActions({ rule, buttonVariant = "ghost", initialDeleteOpen }: AlertActionsProps) {
   const router = useRouter()
   const [openEditDialog, setOpenEditDialog] = useState(false)
-  const [openDeleteDialog, setOpenDeleteDialog] = useState(false)
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(initialDeleteOpen ?? false)
   const [loading, setLoading] = useState(false)
 
   const handleDisable = async () => {

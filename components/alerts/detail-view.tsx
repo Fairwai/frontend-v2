@@ -22,9 +22,10 @@ interface AlertDetailViewProps {
   history: AlertHistoryEntry[]
   cursor: string | null
   prevCursor: string | null
+  openDelete?: boolean
 }
 
-export function AlertDetailView({ rule, history, cursor, prevCursor }: AlertDetailViewProps) {
+export function AlertDetailView({ rule, history, cursor, prevCursor, openDelete }: AlertDetailViewProps) {
   const channels = rule.deliveryChannels as {
     email?: { recipients: string[] }
     callback?: { url: string; secret?: string }
@@ -45,7 +46,7 @@ export function AlertDetailView({ rule, history, cursor, prevCursor }: AlertDeta
           }
         />
         <div className="flex w-full sm:w-auto gap-2 flex-row sm:items-center">
-          <AlertActions rule={rule} buttonVariant="outline" />
+          <AlertActions rule={rule} buttonVariant="outline" initialDeleteOpen={openDelete} />
         </div>
       </div>
 

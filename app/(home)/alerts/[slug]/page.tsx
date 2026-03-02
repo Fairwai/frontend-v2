@@ -6,9 +6,10 @@ import { axiosGetInstance } from "@/lib/api-client"
 import { GET_ALERT_RULE_DETAILS, GET_SESSION, LIST_ALERT_HISTORY } from "@/lib/api-routes"
 import { createPageMetadata } from "@/lib/metadata"
 import {
+  alertDetailSearchParamsSchema,
   type GetAlertRuleDetailsResponse,
-  type ListAlertHistoryResponse,
   getAlertRuleDetailsResponseSchema,
+  type ListAlertHistoryResponse,
   listAlertHistoryResponseSchema
 } from "@/lib/schemas/alerts"
 import { slugRequestParamsSchema } from "@/lib/schemas/common"
@@ -21,15 +22,21 @@ export const metadata: Metadata = createPageMetadata({
 
 interface AlertDetailsPageProps {
   params: Promise<{ slug: string }>
-  searchParams: Promise<{ cursor?: string }>
+  searchParams: Promise<Record<string, string | string[] | undefined>>
 }
 
-export default async function AlertDetailsPage({
-  params,
-  searchParams
-}: AlertDetailsPageProps) {
+export default async function AlertDetailsPage({ params, searchParams }: AlertDetailsPageProps) {
   const requestParams = await params
-  const { cursor } = await searchParams
+  const searchParamsObj = await searchParams
+
+  const { success, data: validatedParams } = slugRequestParamsSchema.safeParse(requestParams)
+  if (!success) {
+    return notFound()
+  }
+
+  const { data: validatedSearchParams } = alertDetailSearchParamsSchema.safeParse(searchParamsObj)
+  const openDelete = validatedSearchParams?.delete ?? false
+  const cursor = validatedSearchParams?.cursor ?? null
 
   const cookieStore = await cookies()
   const session = await axiosGetInstance<SessionResponse>(GET_SESSION, sessionResponseSchema, {
@@ -38,14 +45,10 @@ export default async function AlertDetailsPage({
     }
   })
   const redirectSearchParams = new URLSearchParams()
-  redirectSearchParams.set("redirectTo", "/alerts")
+  const redirectPath = `/alerts/${validatedParams.slug}${openDelete ? "?delete=true" : ""}`
+  redirectSearchParams.set("redirectTo", redirectPath)
   if (!session) {
     return redirect(`/sign-in?${redirectSearchParams.toString()}`)
-  }
-
-  const { success, data: validatedParams } = slugRequestParamsSchema.safeParse(requestParams)
-  if (!success) {
-    return notFound()
   }
 
   const [ruleDetails, alertHistory] = await Promise.all([
@@ -57,17 +60,13 @@ export default async function AlertDetailsPage({
         params: { ruleId: validatedParams.slug }
       }
     ),
-    axiosGetInstance<ListAlertHistoryResponse>(
-      LIST_ALERT_HISTORY,
-      listAlertHistoryResponseSchema,
-      {
-        headers: { Cookie: cookieStore.toString() },
-        params: {
-          ruleId: validatedParams.slug,
-          cursor: cursor ?? null
-        }
+    axiosGetInstance<ListAlertHistoryResponse>(LIST_ALERT_HISTORY, listAlertHistoryResponseSchema, {
+      headers: { Cookie: cookieStore.toString() },
+      params: {
+        ruleId: validatedParams.slug,
+        cursor
       }
-    )
+    })
   ])
 
   return (
@@ -76,6 +75,7 @@ export default async function AlertDetailsPage({
       history={alertHistory.data || []}
       cursor={alertHistory.cursor}
       prevCursor={alertHistory.prev_cursor}
+      openDelete={openDelete}
     />
   )
 }

@@ -7,11 +7,13 @@ import {
   number,
   object,
   type output,
+  preprocess,
   string,
   url,
   enum as zodEnum,
   unknown as zodUnknown
 } from "zod"
+import { CursorSchema } from "@/lib/schemas/common"
 
 // Enums
 export const alertTypeSchema = zodEnum(
@@ -183,6 +185,16 @@ export const testAlertRuleResponseSchema = object({
   })
 })
 
+// Search params schema for alert detail page
+export const alertDetailSearchParamsSchema = object({
+  cursor: CursorSchema,
+  delete: preprocess((value) => {
+    if (typeof value === "string") return value === "true"
+    if (Array.isArray(value)) return value[0] === "true"
+    return false
+  }, boolean().default(false))
+})
+
 // Type exports
 export type AlertType = output<typeof alertTypeSchema>
 export type AlertOperator = output<typeof alertOperatorSchema>
@@ -196,3 +208,4 @@ export type AlertHistoryEntry = output<typeof alertHistoryEntrySchema>
 export type ListAlertHistoryResponse = output<typeof listAlertHistoryResponseSchema>
 export type GetAlertRuleDetailsResponse = output<typeof getAlertRuleDetailsResponseSchema>
 export type TestAlertRuleResponse = output<typeof testAlertRuleResponseSchema>
+export type AlertDetailSearchParams = output<typeof alertDetailSearchParamsSchema>
