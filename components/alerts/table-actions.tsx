@@ -32,15 +32,16 @@ export function AlertActions({ rule, buttonVariant = "ghost", initialDeleteOpen 
   const [openDeleteDialog, setOpenDeleteDialog] = useState(initialDeleteOpen ?? false)
   const [loading, setLoading] = useState(false)
 
-  const handleDisable = async () => {
+  const toggleAlertRule = async (
+    endpoint: typeof ENABLE_ALERT_RULE | typeof DISABLE_ALERT_RULE,
+    successMessage: string
+  ) => {
     if (loading) return
     try {
       setLoading(true)
-      await axiosPatchInstance<{ ruleId: string }, null>(DISABLE_ALERT_RULE, {
-        ruleId: rule.uuid
-      })
+      await axiosPatchInstance<{ ruleId: string }, null>(endpoint, { ruleId: rule.uuid })
       router.refresh()
-      toast.success("Alert rule disabled")
+      toast.success(successMessage)
     } catch (error) {
       toast.error(error instanceof Error ? error.message : genericError)
     } finally {
@@ -48,21 +49,8 @@ export function AlertActions({ rule, buttonVariant = "ghost", initialDeleteOpen 
     }
   }
 
-  const handleEnable = async () => {
-    if (loading) return
-    try {
-      setLoading(true)
-      await axiosPatchInstance<{ ruleId: string }, null>(ENABLE_ALERT_RULE, {
-        ruleId: rule.uuid
-      })
-      router.refresh()
-      toast.success("Alert rule enabled")
-    } catch (error) {
-      toast.error(error instanceof Error ? error.message : genericError)
-    } finally {
-      setLoading(false)
-    }
-  }
+  const handleDisable = () => toggleAlertRule(DISABLE_ALERT_RULE, "Alert rule disabled")
+  const handleEnable = () => toggleAlertRule(ENABLE_ALERT_RULE, "Alert rule enabled")
 
   const handleTest = async () => {
     if (loading) return

@@ -20,7 +20,7 @@ export const CopyButton = forwardRef<
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
-      console.error("copy error", err, text);
+      console.error("copy error", err);
       toast.error("Failed to copy.");
     }
   };

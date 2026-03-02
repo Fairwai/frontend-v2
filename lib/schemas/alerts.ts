@@ -10,8 +10,7 @@ import {
   preprocess,
   string,
   url,
-  enum as zodEnum,
-  unknown as zodUnknown
+  enum as zodEnum
 } from "zod"
 import { CursorSchema } from "@/lib/schemas/common"
 
@@ -114,6 +113,14 @@ export const createAlertRuleStep2Schema = object({
 
 // Edit uses the same step1 + step2 schemas as create
 
+// Delivery channels shape in API responses (parsed by response schemas)
+export const deliveryChannelsViewSchema = object({
+  email: object({ recipients: array(string()) }).optional(),
+  callback: object({ url: string(), secret: string().optional() }).optional()
+})
+
+export type DeliveryChannelsView = output<typeof deliveryChannelsViewSchema> | null
+
 // Response schemas
 export const alertRuleSchema = object({
   id: number(),
@@ -126,7 +133,7 @@ export const alertRuleSchema = object({
   alertType: string(),
   operator: string(),
   value: number(),
-  deliveryChannels: zodUnknown(),
+  deliveryChannels: nullable(deliveryChannelsViewSchema),
   cooldownMinutes: number(),
   createdAt: iso.datetime(),
   updatedAt: iso.datetime()

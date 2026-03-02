@@ -137,7 +137,7 @@ export function UsageContent({ usageStats, searchParams }: UsageContentProps) {
               <ButtonGroup className="w-full sm:w-fit">
                 <TokenSettingsDialog usageStats={usageStats}>
                   <Button variant="secondary" size="sm" className="w-1/3 sm:w-auto">
-                    {usageStats.plan.reminderEnabled || usageStats.plan.autoPurchaseEnabled
+                    {usageStats.plan.autoPurchaseEnabled
                       ? "Manage token settings"
                       : "Set up token settings"}
                   </Button>
@@ -209,7 +209,7 @@ export function UsageContent({ usageStats, searchParams }: UsageContentProps) {
                 Available Tokens{" "}
                 {Number(availableTokens) < 5 ? (
                   <Badge variant="destructive">Dangerously low</Badge>
-                ) : Number(availableTokens) < (usageStats.plan.reminderThreshold || 8) ? (
+                ) : Number(availableTokens) < 8 ? (
                   <Badge variant="warning">Low</Badge>
                 ) : null}
               </span>

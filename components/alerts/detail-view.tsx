@@ -26,10 +26,7 @@ interface AlertDetailViewProps {
 }
 
 export function AlertDetailView({ rule, history, cursor, prevCursor, openDelete }: AlertDetailViewProps) {
-  const channels = rule.deliveryChannels as {
-    email?: { recipients: string[] }
-    callback?: { url: string; secret?: string }
-  } | null
+  const channels = rule.deliveryChannels
 
   return (
     <>
@@ -90,9 +87,11 @@ export function AlertDetailView({ rule, history, cursor, prevCursor, openDelete 
             channels?.email?.recipients && channels.email.recipients.length > 0 ? (
               <HoverCard openDelay={0}>
                 <HoverCardTrigger asChild>
-                  <Badge variant="secondary" className="cursor-default">
-                    {channels.email.recipients.length}{" "}
-                    {channels.email.recipients.length === 1 ? "recipient" : "recipients"}
+                  <Badge asChild variant="secondary" className="cursor-default">
+                    <button type="button">
+                      {channels.email.recipients.length}{" "}
+                      {channels.email.recipients.length === 1 ? "recipient" : "recipients"}
+                    </button>
                   </Badge>
                 </HoverCardTrigger>
                 <HoverCardContent className="w-64 p-1">

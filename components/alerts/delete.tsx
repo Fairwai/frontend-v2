@@ -1,6 +1,6 @@
 "use client"
 
-import { SendHorizontal } from "lucide-react"
+import { Trash2 } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { toast } from "sonner"
@@ -124,7 +124,6 @@ export function DeleteAlertDialog({ open, onOpenChange, rule }: DeleteAlertDialo
                 Cancel
               </Button>
             </DialogClose>
-            </DialogClose>
             <Button
               type="submit"
               variant="destructive"
@@ -137,7 +136,7 @@ export function DeleteAlertDialog({ open, onOpenChange, rule }: DeleteAlertDialo
                 </>
               ) : (
                 <>
-                  <SendHorizontal /> Delete
+                  <Trash2 /> Delete
                 </>
               )}
             </Button>

@@ -38,9 +38,6 @@ export const usageStatsSchema = object({
     autoPurchaseEnabled: boolean(),
     autoPurchaseTokenThreshold: number().nullable(),
     autoPurchasePriceId: string().nullable(),
-    reminderEnabled: boolean(),
-    reminderThreshold: number().nullable(),
-    reminderEmail: string().nullable(),
     stripeCustomerId: string().nullable().optional(),
     isV1SubscriptionActive: boolean(),
   }),
@@ -224,24 +221,10 @@ export const updateAutoRefillSettingsSchema = discriminatedUnion("enabled", [
   }),
 ]);
 
-export const updateReminderSettingsSchema = discriminatedUnion("enabled", [
-  object({
-    enabled: literal(false),
-  }),
-  object({
-    enabled: literal(true),
-    threshold: number().int().positive().min(1, "Threshold must be at least 1"),
-    email: email("Invalid email address"),
-  }),
-]);
-
 export type TokenPack = output<typeof tokenPackSchema>;
 export type TokenPacksResponse = output<typeof tokenPacksResponseSchema>;
 export type UpdateAutoRefillSettings = output<
   typeof updateAutoRefillSettingsSchema
->;
-export type UpdateReminderSettings = output<
-  typeof updateReminderSettingsSchema
 >;
 
 // Token purchase schemas

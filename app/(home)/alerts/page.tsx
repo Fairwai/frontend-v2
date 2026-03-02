@@ -18,10 +18,10 @@ export const metadata: Metadata = createPageMetadata({
 
 export default async function AlertsPage() {
   const cookieStore = await cookies()
+  const authHeaders = { Cookie: cookieStore.toString() }
+
   const session = await axiosGetInstance<SessionResponse>(GET_SESSION, sessionResponseSchema, {
-    headers: {
-      Cookie: cookieStore.toString()
-    }
+    headers: authHeaders
   })
   const redirectSearchParams = new URLSearchParams()
   redirectSearchParams.set("redirectTo", "/alerts")
@@ -32,11 +32,7 @@ export default async function AlertsPage() {
   const alertRules = await axiosGetInstance<ListAlertRulesResponse>(
     LIST_ALERT_RULES,
     listAlertRulesResponseSchema,
-    {
-      headers: {
-        Cookie: cookieStore.toString()
-      }
-    }
+    { headers: authHeaders }
   )
 
   return (
