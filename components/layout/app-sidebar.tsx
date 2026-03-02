@@ -1,6 +1,7 @@
 "use client"
 
 import {
+  Bell,
   Bot,
   Calendar,
   CalendarClock,
@@ -28,6 +29,7 @@ import {
   SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
+  SidebarMenuBadge,
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar
@@ -78,6 +80,13 @@ const allItems = [
     url: "/settings",
     icon: Settings,
     featureKey: null
+  },
+  {
+    title: "Alerts",
+    url: "/alerts",
+    icon: Bell,
+    featureKey: null,
+    badge: "New"
   }
 ]
 
@@ -145,6 +154,7 @@ export function AppSidebar({ sessionResponse }: AppSidebarProps) {
                       <span>{item.title}</span>
                     </Link>
                   </SidebarMenuButton>
+                  {item.badge && <SidebarMenuBadge>{item.badge}</SidebarMenuBadge>}
                 </SidebarMenuItem>
               ))}
             </SidebarMenu>
