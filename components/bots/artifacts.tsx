@@ -159,7 +159,7 @@ export function Artifacts({ botDetails, botUuid }: ArtifactsProps) {
           </EmptyMedia>
           <EmptyTitle>No artifacts generated</EmptyTitle>
           <EmptyDescription>
-            The bot has did not generate any artifacts.{" "}
+            The bot did not generate any artifacts.{" "}
             {botDetails.status_history && botDetails.status_history.length > 0 ? (
               <div>
                 <span className="font-bold">Error:</span>{" "}

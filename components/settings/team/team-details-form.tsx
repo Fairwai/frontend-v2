@@ -72,24 +72,25 @@ export function TeamDetailsForm({
       const nameChanged = data.name !== initialName
       const artifactAccessChanged = data.apiOnlyArtifactAccess !== initialApiOnlyArtifactAccess
 
-      // Update team name via Better Auth (only if changed)
+      // Perform both updates before updating local state
       if (nameChanged) {
         await authClient.organization.update({
           organizationId: teamId.toString(),
           data: { name: data.name }
         })
-        updateActiveTeam({ name: data.name })
       }
 
-      // Update team features (only if changed)
       if (artifactAccessChanged) {
         await axiosPatchInstance(UPDATE_TEAM_FEATURES, {
           apiOnlyArtifactAccess: data.apiOnlyArtifactAccess
         })
-        updateActiveTeam({
-          apiOnlyArtifactAccess: data.apiOnlyArtifactAccess
-        })
       }
+
+      // Only update local state after all API calls succeed
+      updateActiveTeam({
+        ...(nameChanged && { name: data.name }),
+        ...(artifactAccessChanged && { apiOnlyArtifactAccess: data.apiOnlyArtifactAccess })
+      })
 
       reset({
         name: data.name,
