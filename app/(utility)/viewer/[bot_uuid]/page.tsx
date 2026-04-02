@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 import { Viewer } from "@/components/viewer"
+import { RestrictedViewer } from "@/components/viewer/restricted"
 import type { APIError } from "@/lib/api-client"
 import { axiosGetInstance } from "@/lib/api-client"
 import { ADMIN_GET_BOT_DETAILS, GET_BOT_DETAILS, GET_SESSION } from "@/lib/api-routes"
@@ -92,16 +93,7 @@ export default async function ViewerPage({ params }: ViewerPageProps) {
 
     // Check if API-only artifact access is enabled
     if (botDetails.data.api_only_artifact_access) {
-      const error = new Error(
-        "Artifact access is restricted to API only for this account."
-      ) as APIError
-      error.errorResponse = {
-        success: false,
-        error:
-          "API-only artifact access is enabled. Recordings cannot be viewed from the dashboard.",
-        code: "API_ONLY_ARTIFACT_ACCESS"
-      }
-      throw error
+      return <RestrictedViewer />
     }
 
     // Find video and transcription artifacts from regular response
