@@ -17,7 +17,7 @@ import type { WebhookMessageDetails } from "@/lib/schemas/webhooks"
 
 function isRedactedPayload(
   payload: WebhookMessageDetails["payload"]
-): payload is { redacted: true; reason: string } {
+): payload is { redacted: true; reason: string; bot_id: string | null } {
   return payload !== null && "redacted" in payload && payload.redacted === true
 }
 
