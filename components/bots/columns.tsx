@@ -15,10 +15,11 @@ import type { BotListEntry } from "@/lib/schemas/bots"
 import { cn } from "@/lib/utils"
 
 /** Format a status string for display: "INSUFFICIENT_TOKENS" -> "Insufficient Tokens" */
+const ACRONYMS = new Set(["OOM", "API", "SDK", "JWT", "URL", "OBF"])
 export const formatStatusLabel = (status: string) =>
   status
     .split("_")
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .map((word) => (ACRONYMS.has(word) ? word : word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()))
     .join(" ")
 
 // Color classes by category
