@@ -72,7 +72,7 @@ export const columns: ColumnDef<AdminBotListItem>[] = [
     },
     cell: ({ row }) => {
       return (
-        <Badge className={cn(botColorVariants({ status: row.original.status as any }))}>
+        <Badge className={cn(botColorVariants({ status: row.original.status }))}>
           {formatStatusLabel(row.original.status)}
         </Badge>
       )

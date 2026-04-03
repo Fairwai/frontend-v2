@@ -76,45 +76,41 @@ export const botColorVariants = cva("", {
       RECORDING_TIMEOUT: SLATE,
       API_REQUEST: SLATE,
 
-      // Join/recording error codes - Red
-      BOT_REMOVED_TOO_EARLY: RED,
-      BOT_NOT_ACCEPTED: RED,
-      CANNOT_JOIN_MEETING: RED,
-      TIMEOUT_WAITING_TO_START: RED,
-      INVALID_MEETING_URL: RED,
-      STREAMING_SETUP_FAILED: RED,
-      LOGIN_REQUIRED: RED,
-      INTERNAL_ERROR: RED,
-
-      // Crash error codes - Red
-      OOM_KILLED: RED,
-      SIGTERM: RED,
-      FORCE_KILLED: RED,
-      GENERAL_ERROR: RED,
-
-      // Transcription errors - Red
-      TRANSCRIPTION_FAILED: RED,
-
-      // Zoom-specific errors - Red
-      WAITING_FOR_HOST_TIMEOUT: RED,
-      RECORDING_RIGHTS_NOT_GRANTED: RED,
-      CANNOT_REQUEST_RECORDING_RIGHT: RED,
-      EXITING_MEETING_BEFORE_RECORD: RED,
-      MEETING_ENDED_PREMATURELY: RED,
-      SET_ZOOM_ID_AND_PWD_TOGETHER: RED,
-      CANNOT_GET_JWT_TOKEN: RED,
-      SDK_AUTH_FAILED: RED,
-      ZOOM_ACCESS_TOKEN_ERROR: RED,
-      ZOOM_OBF_TOKEN_ERROR: RED,
-      RECORDING_START_TIMEOUT: RED,
-      HOST_CLIENT_CANNOT_GRANT_PERMISSION: RED,
-      WAITING_FOR_AUTHORIZED_USER_TIMEOUT: RED,
-      UNABLE_JOIN_EXTERNAL_MEETING: RED,
+      // Meeting conditions - Amber (meeting/host behavior, not infra errors)
+      BOT_NOT_ACCEPTED: AMBER,
+      INVALID_MEETING_URL: AMBER,
+      TIMEOUT_WAITING_TO_START: AMBER,
+      LOGIN_REQUIRED: AMBER,
+      BOT_REMOVED_TOO_EARLY: AMBER,
+      MEETING_ENDED_PREMATURELY: AMBER,
+      WAITING_FOR_HOST_TIMEOUT: AMBER,
+      RECORDING_RIGHTS_NOT_GRANTED: AMBER,
+      CANNOT_REQUEST_RECORDING_RIGHT: AMBER,
+      EXITING_MEETING_BEFORE_RECORD: AMBER,
+      HOST_CLIENT_CANNOT_GRANT_PERMISSION: AMBER,
+      WAITING_FOR_AUTHORIZED_USER_TIMEOUT: AMBER,
+      UNABLE_JOIN_EXTERNAL_MEETING: AMBER,
 
       // Business errors - Amber
       INSUFFICIENT_TOKENS: AMBER,
       DAILY_BOT_CAP_REACHED: AMBER,
       BOT_ALREADY_EXISTS: AMBER,
+
+      // System/infra errors - Red
+      CANNOT_JOIN_MEETING: RED,
+      STREAMING_SETUP_FAILED: RED,
+      INTERNAL_ERROR: RED,
+      OOM_KILLED: RED,
+      SIGTERM: RED,
+      FORCE_KILLED: RED,
+      GENERAL_ERROR: RED,
+      TRANSCRIPTION_FAILED: RED,
+      RECORDING_START_TIMEOUT: RED,
+      SET_ZOOM_ID_AND_PWD_TOGETHER: RED,
+      CANNOT_GET_JWT_TOKEN: RED,
+      SDK_AUTH_FAILED: RED,
+      ZOOM_ACCESS_TOKEN_ERROR: RED,
+      ZOOM_OBF_TOKEN_ERROR: RED,
 
       // Unknown fallback - Red
       UNKNOWN_ERROR: RED
@@ -184,7 +180,7 @@ export const columns: ColumnDef<BotListEntry>[] = [
     },
     cell: ({ row }) => {
       return (
-        <Badge className={cn(botColorVariants({ status: row.original.status as any }))}>
+        <Badge className={cn(botColorVariants({ status: row.original.status }))}>
           {formatStatusLabel(row.original.status)}
         </Badge>
       )

@@ -41,46 +41,46 @@ export const STATUS_GROUPS: { label: string; statuses: BotStatus[] }[] = [
   // Normal end codes (BOT_REMOVED, NO_ATTENDEES, NO_SPEAKER, RECORDING_TIMEOUT, API_REQUEST)
   // are not included here — they result in resolved_status="completed", not a failure error code.
   {
-    label: "Errors",
+    label: "Meeting Conditions",
     statuses: [
       "BOT_NOT_ACCEPTED",
-      "CANNOT_JOIN_MEETING",
-      "TIMEOUT_WAITING_TO_START",
       "INVALID_MEETING_URL",
+      "TIMEOUT_WAITING_TO_START",
       "LOGIN_REQUIRED",
-      "STREAMING_SETUP_FAILED",
-      "INTERNAL_ERROR",
       "BOT_REMOVED_TOO_EARLY",
-      "TRANSCRIPTION_FAILED",
-      "OOM_KILLED",
-      "SIGTERM",
-      "FORCE_KILLED",
-      "GENERAL_ERROR",
-      "UNKNOWN_ERROR"
-    ]
-  },
-  {
-    label: "Zoom Errors",
-    statuses: [
+      "MEETING_ENDED_PREMATURELY",
       "WAITING_FOR_HOST_TIMEOUT",
       "RECORDING_RIGHTS_NOT_GRANTED",
       "CANNOT_REQUEST_RECORDING_RIGHT",
       "EXITING_MEETING_BEFORE_RECORD",
-      "MEETING_ENDED_PREMATURELY",
-      "RECORDING_START_TIMEOUT",
       "HOST_CLIENT_CANNOT_GRANT_PERMISSION",
       "WAITING_FOR_AUTHORIZED_USER_TIMEOUT",
-      "UNABLE_JOIN_EXTERNAL_MEETING",
+      "UNABLE_JOIN_EXTERNAL_MEETING"
+    ]
+  },
+  {
+    label: "Billing",
+    statuses: ["INSUFFICIENT_TOKENS", "DAILY_BOT_CAP_REACHED", "BOT_ALREADY_EXISTS"]
+  },
+  {
+    label: "Errors",
+    statuses: [
+      "CANNOT_JOIN_MEETING",
+      "STREAMING_SETUP_FAILED",
+      "INTERNAL_ERROR",
+      "OOM_KILLED",
+      "SIGTERM",
+      "FORCE_KILLED",
+      "GENERAL_ERROR",
+      "TRANSCRIPTION_FAILED",
+      "RECORDING_START_TIMEOUT",
+      "SET_ZOOM_ID_AND_PWD_TOGETHER",
       "CANNOT_GET_JWT_TOKEN",
       "SDK_AUTH_FAILED",
       "ZOOM_ACCESS_TOKEN_ERROR",
       "ZOOM_OBF_TOKEN_ERROR",
-      "SET_ZOOM_ID_AND_PWD_TOGETHER"
+      "UNKNOWN_ERROR"
     ]
-  },
-  {
-    label: "Business",
-    statuses: ["INSUFFICIENT_TOKENS", "DAILY_BOT_CAP_REACHED", "BOT_ALREADY_EXISTS"]
   }
 ]
 
