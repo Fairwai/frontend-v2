@@ -3,6 +3,7 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import type { VariantProps } from "class-variance-authority";
 import { Badge, type badgeVariants } from "@/components/ui/badge";
+import { HoverCopyCard } from "@/components/ui/hover-copy-card";
 import { formatDurationBetweenDates, formatRelativeDate } from "@/lib/date-helpers";
 import type { WebhookMessageAttempt } from "@/lib/schemas/webhooks";
 
@@ -108,15 +109,13 @@ export const columns: ColumnDef<WebhookMessageAttempt>[] = [
     accessorKey: "response",
     header: "Response",
     meta: { className: columnWidths.response },
-    cell: ({ row }) => (
-      <span
-        className="truncate block max-w-[200px]"
-        title={row.original.response}
-      >
-        {row.original.response || (
-          <span className="text-muted-foreground">-</span>
-        )}
-      </span>
-    ),
+    cell: ({ row }) => {
+      const response = row.original.response;
+      if (!response) {
+        return <span className="text-muted-foreground">-</span>;
+      }
+
+      return <HoverCopyCard text={response} title="Response Body" />;
+    },
   },
 ];
